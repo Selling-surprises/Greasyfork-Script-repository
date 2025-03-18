@@ -10,8 +10,8 @@
 // @license      MIT
 // @icon         https://static.zhihu.com/heifetz/favicon.ico
 // @grant        none
-// @downloadURL https://update.greasyfork.org/scripts/478608/%E7%9F%A5%E4%B9%8E%E4%B8%8B%E8%BD%BD%E5%99%A8.user.js
-// @updateURL https://update.greasyfork.org/scripts/478608/%E7%9F%A5%E4%B9%8E%E4%B8%8B%E8%BD%BD%E5%99%A8.meta.js
+// @downloadURL https://yxd.dahi.edu.eu.org/scripts/478608/%E7%9F%A5%E4%B9%8E%E4%B8%8B%E8%BD%BD%E5%99%A8.user.js
+// @updateURL https://yxd.dahi.edu.eu.org/scripts/478608/%E7%9F%A5%E4%B9%8E%E4%B8%8B%E8%BD%BD%E5%99%A8.meta.js
 // ==/UserScript==
 
 /** 更新日志
