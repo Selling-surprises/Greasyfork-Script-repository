@@ -2,16 +2,57 @@
 // @name         蓝奏云链接转换
 // @namespace    http://tampermonkey.net/
 // @version      0.1
-// @description  将*.lanzous.com、*.lanzoue.com、*.lanzoux.com链接转换为pan.lanzoui.com
+// @description  将蓝奏云一级域名链接转换为pan.lanzoui.com
 // @author       Cursor
-// @match        *://*.lanzous.com/*
-// @match        *://*.lanzou.com/*
+// @match        *://*.lanzoua.com/*
+// @match        *://*.lanzoub.com/*
+// @match        *://*.lanzouc.com/*
+// @match        *://*.lanzoud.com/*
 // @match        *://*.lanzoue.com/*
+// @match        *://*.lanzouf.com/*
+// @match        *://*.lanzoug.com/*
+// @match        *://*.lanzouh.com/*
+// @match        *://*.lanzouj.com/*
+// @match        *://*.lanzouk.com/*
+// @match        *://*.lanzoul.com/*
+// @match        *://*.lanzoum.com/*
+// @match        *://*.lanzoun.com/*
+// @match        *://*.lanzouo.com/*
+// @match        *://*.lanzoup.com/*
+// @match        *://*.lanzouq.com/*
+// @match        *://*.lanzour.com/*
+// @match        *://*.lanzous.com/*
+// @match        *://*.lanzout.com/*
+// @match        *://*.lanzou.com/*
+// @match        *://*.lanzouu.com/*
+// @match        *://*.lanzouv.com/*
+// @match        *://*.lanzouw.com/*
 // @match        *://*.lanzoux.com/*
-// @match        *://lanzous.com/*
+// @match        *://*.lanzouy.com/*
+// @match        *://*.lanzouz.com/*
+// @match        *://lanzoua.com/*
+// @match        *://lanzoub.com/*
+// @match        *://lanzouc.com/*
+// @match        *://lanzoud.com/*
+// @match        *://lanzouf.com/*
+// @match        *://lanzoug.com/*
+// @match        *://lanzouh.com/*
+// @match        *://lanzouj.com/*
+// @match        *://lanzouk.com/*
+// @match        *://lanzoul.com/*
+// @match        *://lanzoum.com/*
+// @match        *://lanzoun.com/*
+// @match        *://lanzouo.com/*
+// @match        *://lanzoup.com/*
+// @match        *://lanzouq.com/*
+// @match        *://lanzour.com/*
+// @match        *://lanzout.com/*
 // @match        *://lanzou.com/*
-// @match        *://lanzoue.com/*
-// @match        *://lanzoux.com/*
+// @match        *://lanzouu.com/*
+// @match        *://lanzouv.com/*
+// @match        *://lanzouw.com/*
+// @match        *://lanzouy.com/*
+// @match        *://lanzouz.com/*
 // @match        *://*/*
 // @grant        none
 // @run-at       document-start
@@ -20,14 +61,21 @@
 
 (function() {
     'use strict';
-    
+
     // 定义需要重定向的域名
-    const targetDomains = ['lanzous.com', 'lanzoue.com', 'lanzoux.com'];
-    
+    const targetDomains = [
+        'lanzoua.com', 'lanzoub.com', 'lanzouc.com', 'lanzoud.com', 'lanzoue.com', 
+        'lanzouf.com', 'lanzoug.com', 'lanzouh.com', 'lanzouj.com', 'lanzouk.com', 
+        'lanzoul.com', 'lanzoum.com', 'lanzoun.com', 'lanzouo.com', 'lanzoup.com', 
+        'lanzouq.com', 'lanzour.com', 'lanzous.com', 'lanzout.com', 'lanzou.com', 
+        'lanzouu.com', 'lanzouv.com', 'lanzouw.com', 'lanzoux.com', 'lanzouy.com', 
+        'lanzouz.com'
+    ];
+
     // 检查当前URL是否需要重定向
     const currentHostname = window.location.hostname;
     const needsRedirect = targetDomains.some(domain => currentHostname.includes(domain));
-    
+
     if (needsRedirect) {
         // 获取当前路径
         const path = window.location.pathname + window.location.search + window.location.hash;
@@ -37,41 +85,41 @@
         window.location.href = newUrl;
         return;
     }
-    
+
     // 在页面加载完成后执行
     window.addEventListener('load', function() {
         // 替换页面上所有的蓝奏云链接
         replaceLinks();
-        
+
         // 监听DOM变化，处理动态加载的内容
         const observer = new MutationObserver(function(mutations) {
             replaceLinks();
         });
-        
+
         observer.observe(document.body, {
             childList: true,
             subtree: true
         });
     });
-    
+
     // 替换页面上的链接
     function replaceLinks() {
         // 获取所有的a标签
         const links = document.querySelectorAll('a');
-        
+
         links.forEach(function(link) {
             const href = link.href;
-            
+
             // 检查链接是否包含任何目标域名
             const needsReplacement = targetDomains.some(domain => href && href.includes(domain));
-            
+
             if (needsReplacement) {
                 // 创建URL对象
                 try {
                     const url = new URL(href);
                     // 检查主机名是否包含任何目标域名
                     const shouldReplace = targetDomains.some(domain => url.hostname.includes(domain));
-                    
+
                     if (shouldReplace) {
                         // 构建新URL
                         const newUrl = 'https://pan.lanzoui.com' + url.pathname + url.search + url.hash;
@@ -84,4 +132,4 @@
             }
         });
     }
-})(); 
+})();
