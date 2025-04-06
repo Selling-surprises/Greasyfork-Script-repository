@@ -16,8 +16,8 @@
 // @grant        GM_setValue
 // @grant        GM_registerMenuCommand
 // @grant        GM_openInTab
-// @downloadURL https://yxd.dahi.edu.eu.org/scripts/398278/Github%20%E9%95%9C%E5%83%8F%E8%AE%BF%E9%97%AE%EF%BC%8C%E5%8A%A0%E9%80%9F%E4%B8%8B%E8%BD%BD.user.js
-// @updateURL https://yxd.dahi.edu.eu.org/scripts/398278/Github%20%E9%95%9C%E5%83%8F%E8%AE%BF%E9%97%AE%EF%BC%8C%E5%8A%A0%E9%80%9F%E4%B8%8B%E8%BD%BD.meta.js
+// @downloadURL https://update.greasyfork.org.cn/scripts/398278/Github%20%E9%95%9C%E5%83%8F%E8%AE%BF%E9%97%AE%EF%BC%8C%E5%8A%A0%E9%80%9F%E4%B8%8B%E8%BD%BD.user.js
+// @updateURL https://update.greasyfork.org.cn/scripts/398278/Github%20%E9%95%9C%E5%83%8F%E8%AE%BF%E9%97%AE%EF%BC%8C%E5%8A%A0%E9%80%9F%E4%B8%8B%E8%BD%BD.meta.js
 // ==/UserScript==
 
 (function () {
