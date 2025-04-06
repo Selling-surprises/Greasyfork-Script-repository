@@ -72,8 +72,24 @@
         'lanzouz.com'
     ];
 
+    // 定义需要排除的域名
+    const excludeDomains = [
+        'ilanzou.com'
+    ];
+
+    // 检查域名是否在排除列表中
+    function isExcluded(hostname) {
+        return excludeDomains.some(domain => hostname.includes(domain));
+    }
+
     // 检查当前URL是否需要重定向
     const currentHostname = window.location.hostname;
+    
+    // 如果在排除列表中，则不进行重定向
+    if (isExcluded(currentHostname)) {
+        return;
+    }
+    
     const needsRedirect = targetDomains.some(domain => currentHostname.includes(domain));
 
     if (needsRedirect) {
@@ -110,25 +126,26 @@
         links.forEach(function(link) {
             const href = link.href;
 
-            // 检查链接是否包含任何目标域名
-            const needsReplacement = targetDomains.some(domain => href && href.includes(domain));
-
-            if (needsReplacement) {
-                // 创建URL对象
-                try {
-                    const url = new URL(href);
-                    // 检查主机名是否包含任何目标域名
-                    const shouldReplace = targetDomains.some(domain => url.hostname.includes(domain));
-
-                    if (shouldReplace) {
-                        // 构建新URL
-                        const newUrl = 'https://pan.lanzoui.com' + url.pathname + url.search + url.hash;
-                        // 更新链接
-                        link.href = newUrl;
-                    }
-                } catch (e) {
-                    // 忽略无效URL
+            // 创建URL对象
+            try {
+                const url = new URL(href);
+                
+                // 如果域名在排除列表中，则不替换
+                if (isExcluded(url.hostname)) {
+                    return;
                 }
+                
+                // 检查链接是否包含任何目标域名
+                const needsReplacement = targetDomains.some(domain => url.hostname.includes(domain));
+
+                if (needsReplacement) {
+                    // 构建新URL
+                    const newUrl = 'https://pan.lanzoui.com' + url.pathname + url.search + url.hash;
+                    // 更新链接
+                    link.href = newUrl;
+                }
+            } catch (e) {
+                // 忽略无效URL
             }
         });
     }
