@@ -1,6 +1,8 @@
 https://soujiaoben.org/#/pages/list/list
 
-https://gf.qytechs.cn/zh-CN
+https://gf.qytechs.cn/zh-CN/scripts
+
+https://greasyfork.cc/zh-CN/scripts
 
 https://upos-sg-mirror2c-gfork.dahi.icu/zh-hans/scripts
 
