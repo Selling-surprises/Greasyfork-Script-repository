@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         微软翻译移动端（不支持Via）
 // @namespace    http://tampermonkey.net/
-// @version      0.1
-// @description  支持多语翻译（会智能检测语言），翻译面板默认折叠
+// @version      0.2
+// @description  支持多语翻译（会智能检测语言），翻译面板默认折叠，优化移动端长按复制体验
 // @author       Your name
 // @match        *://*/*
 // @grant        GM_xmlhttpRequest
@@ -68,6 +68,8 @@
         microsoftRegion: 'global',   // 微软翻译API区域
         useChineseServer: false,     // 是否使用中国区服务器
         enableFallbackToGoogle: false, // 微软翻译失败时不再尝试谷歌翻译
+        enableRightClickMenu: true,  // 是否启用右键菜单
+        longPressDelay: 800,         // 移动端长按触发延迟(毫秒)
     };
 
     // 获取配置
@@ -279,6 +281,40 @@
             border-color: #1890ff;
         }
 
+        /* 上下文菜单样式 */
+        .${NAMESPACE}-context-menu {
+            border-radius: 8px;
+            overflow: hidden;
+            width: 180px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+            background-color: white;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        .${NAMESPACE}-context-menu div:not([style*="border-top"]) {
+            padding: 12px 20px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .${NAMESPACE}-context-menu div:not([style*="border-top"]):hover,
+        .${NAMESPACE}-context-menu div:not([style*="border-top"]):active {
+            background-color: #f0f9ff;
+        }
+
+        /* 移动端适配 */
+        @media (max-width: 768px) {
+            .${NAMESPACE}-context-menu {
+                width: auto;
+                min-width: 200px;
+            }
+            
+            .${NAMESPACE}-context-menu div:not([style*="border-top"]) {
+                padding: 14px 20px;
+                font-size: 16px;
+            }
+        }
+
         /* 设置面板样式 */
         .${NAMESPACE}-settings-panel {
             position: fixed;
@@ -329,11 +365,40 @@
 
         .${NAMESPACE}-settings-item input[type="text"],
         .${NAMESPACE}-settings-item input[type="password"],
+        .${NAMESPACE}-settings-item input[type="number"],
         .${NAMESPACE}-settings-item select {
             flex: 1;
             padding: 6px 10px;
             border: 1px solid #ddd;
             border-radius: 4px;
+        }
+
+        /* 增强移动端点击体验 */
+        @media (max-width: 768px) {
+            .${NAMESPACE}-settings-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .${NAMESPACE}-settings-item label {
+                margin-bottom: 6px;
+                margin-right: 0;
+                font-size: 14px;
+            }
+            
+            .${NAMESPACE}-settings-item input[type="text"],
+            .${NAMESPACE}-settings-item input[type="password"], 
+            .${NAMESPACE}-settings-item input[type="number"],
+            .${NAMESPACE}-settings-item select {
+                width: 100%;
+                padding: 10px;
+                font-size: 16px;
+            }
+            
+            .${NAMESPACE}-settings-item input[type="checkbox"] {
+                transform: scale(1.5);
+                margin-left: 0;
+            }
         }
 
         .${NAMESPACE}-settings-tip {
@@ -607,6 +672,15 @@
         dualBtn.id = `${NAMESPACE}-show-dual`;
         dualBtn.textContent = '显示双语';
 
+        // 添加设置按钮
+        const settingsBtn = document.createElement('button');
+        settingsBtn.className = `${NAMESPACE}-btn`;
+        settingsBtn.textContent = '设置';
+        settingsBtn.addEventListener('click', () => {
+            const settingsPanel = document.querySelector(`.${NAMESPACE}-settings-panel`) || createSettingsPanel();
+            settingsPanel.style.display = 'block';
+        });
+
         // 组装面板
         panel.appendChild(collapseBtn);
         panel.appendChild(expandIcon);
@@ -621,6 +695,7 @@
 
         // 第二行控制：翻译按钮
         controls.appendChild(translateBtn);
+        controls.appendChild(settingsBtn);
         panel.appendChild(controls);
 
         // 显示模式控制
@@ -928,80 +1003,165 @@
 
     // 添加右键菜单
     function createContextMenu() {
-        document.addEventListener('contextmenu', function(event) {
-            const selectedText = window.getSelection().toString().trim();
-            if (selectedText) {
-                event.preventDefault();
-
-                const contextMenu = document.createElement('div');
-                contextMenu.style.cssText = `
-                    position: fixed;
-                    z-index: 10000;
-                    background: white;
-                    border: 1px solid #ccc;
-                    border-radius: 4px;
-                    padding: 5px 0;
-                    box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
-                    left: ${event.pageX}px;
-                    top: ${event.pageY}px;
-                `;
-
-                // 只保留微软翻译选项
-                const item = document.createElement('div');
-                item.style.cssText = `
-                    padding: 5px 20px;
-                    cursor: pointer;
-                    &:hover {
-                        background: #f0f0f0;
+        if (!CONFIG.enableRightClickMenu) return; // 如果配置为不启用右键菜单，直接返回
+        
+        // 移动端触摸相关变量
+        let touchStartTime = 0;
+        let touchTimer = null;
+        let touchStartX = 0;
+        let touchStartY = 0;
+        const TOUCH_MOVE_THRESHOLD = 10; // 移动超过这个像素值则不触发菜单
+        
+        // 移动端触摸开始事件
+        if (isMobile.any()) {
+            document.addEventListener('touchstart', function(event) {
+                // 记录触摸开始时间和位置
+                touchStartTime = Date.now();
+                touchStartX = event.touches[0].clientX;
+                touchStartY = event.touches[0].clientY;
+                
+                // 清除之前可能存在的定时器
+                if (touchTimer) clearTimeout(touchTimer);
+                
+                // 设置新的定时器
+                touchTimer = setTimeout(function() {
+                    const selection = window.getSelection();
+                    const selectedText = selection.toString().trim();
+                    
+                    // 只在有文本选中时显示菜单
+                    if (selectedText) {
+                        // 显示翻译菜单
+                        showTranslateMenu(event.touches[0].clientX, event.touches[0].clientY, selectedText);
                     }
-                `;
-                item.textContent = '翻译选中文本';
-                item.addEventListener('click', async () => {
-                    try {
-                        const result = await microsoftTranslate(selectedText);
-                        alert(`翻译结果：\n${result}`);
-                    } catch (error) {
-                        alert(`翻译失败：${error.message}`);
+                }, CONFIG.longPressDelay);
+            }, { passive: true });
+            
+            // 触摸移动时，如果移动距离过大，取消菜单
+            document.addEventListener('touchmove', function(event) {
+                const moveX = Math.abs(event.touches[0].clientX - touchStartX);
+                const moveY = Math.abs(event.touches[0].clientY - touchStartY);
+                
+                // 如果移动距离超过阈值，清除定时器
+                if (moveX > TOUCH_MOVE_THRESHOLD || moveY > TOUCH_MOVE_THRESHOLD) {
+                    if (touchTimer) {
+                        clearTimeout(touchTimer);
+                        touchTimer = null;
                     }
-                    document.body.removeChild(contextMenu);
-                });
-                contextMenu.appendChild(item);
-
-                // 添加翻译整页选项
-                const separator = document.createElement('div');
-                separator.style.borderTop = '1px solid #ccc';
-                separator.style.margin = '5px 0';
-                contextMenu.appendChild(separator);
-
-                const translateFullPageItem = document.createElement('div');
-                translateFullPageItem.style.cssText = `
-                    padding: 5px 20px;
-                    cursor: pointer;
-                    &:hover {
-                        background: #f0f0f0;
-                    }
-                `;
-                translateFullPageItem.textContent = '翻译整个网页';
-                translateFullPageItem.addEventListener('click', () => {
-                    translateFullPage();
-                    document.body.removeChild(contextMenu);
-                });
-                contextMenu.appendChild(translateFullPageItem);
-
-                document.body.appendChild(contextMenu);
-
-                // 点击其他地方关闭菜单
-                const closeMenu = (e) => {
-                    if (!contextMenu.contains(e.target)) {
-                        document.body.removeChild(contextMenu);
-                        document.removeEventListener('click', closeMenu);
-                    }
-                };
-                setTimeout(() => {
-                    document.addEventListener('click', closeMenu);
-                }, 0);
+                }
+            }, { passive: true });
+            
+            // 触摸结束时清除定时器
+            document.addEventListener('touchend', function() {
+                if (touchTimer) {
+                    clearTimeout(touchTimer);
+                    touchTimer = null;
+                }
+            }, { passive: true });
+            
+            // 触摸取消时清除定时器
+            document.addEventListener('touchcancel', function() {
+                if (touchTimer) {
+                    clearTimeout(touchTimer);
+                    touchTimer = null;
+                }
+            }, { passive: true });
+        }
+        
+        // 桌面端右键菜单
+        if (!isMobile.any()) {
+            document.addEventListener('contextmenu', function(event) {
+                const selectedText = window.getSelection().toString().trim();
+                if (selectedText) {
+                    event.preventDefault();
+                    showTranslateMenu(event.pageX, event.pageY, selectedText);
+                }
+            });
+        }
+        
+        // 显示翻译菜单函数
+        function showTranslateMenu(x, y, selectedText) {
+            // 移除已存在的菜单
+            const existingMenu = document.querySelector(`.${NAMESPACE}-context-menu`);
+            if (existingMenu) {
+                document.body.removeChild(existingMenu);
             }
-        });
+            
+            const contextMenu = document.createElement('div');
+            contextMenu.className = `${NAMESPACE}-context-menu`;
+            contextMenu.style.cssText = `
+                position: fixed;
+                z-index: 10000;
+                background: white;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                padding: 5px 0;
+                box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+                left: ${x}px;
+                top: ${y}px;
+            `;
+            
+            // 翻译选中文本选项
+            const item = document.createElement('div');
+            item.style.cssText = `
+                padding: 10px 20px;
+                cursor: pointer;
+                font-size: 16px;
+                &:hover {
+                    background: #f0f0f0;
+                }
+            `;
+            item.textContent = '翻译选中文本';
+            item.addEventListener('click', async () => {
+                try {
+                    const result = await microsoftTranslate(selectedText);
+                    alert(`翻译结果：\n${result}`);
+                } catch (error) {
+                    alert(`翻译失败：${error.message}`);
+                }
+                document.body.removeChild(contextMenu);
+            });
+            contextMenu.appendChild(item);
+            
+            // 添加翻译整页选项
+            const separator = document.createElement('div');
+            separator.style.borderTop = '1px solid #ccc';
+            separator.style.margin = '5px 0';
+            contextMenu.appendChild(separator);
+            
+            const translateFullPageItem = document.createElement('div');
+            translateFullPageItem.style.cssText = `
+                padding: 10px 20px;
+                cursor: pointer;
+                font-size: 16px;
+                &:hover {
+                    background: #f0f0f0;
+                }
+            `;
+            translateFullPageItem.textContent = '翻译整个网页';
+            translateFullPageItem.addEventListener('click', () => {
+                translateFullPage();
+                document.body.removeChild(contextMenu);
+            });
+            contextMenu.appendChild(translateFullPageItem);
+            
+            document.body.appendChild(contextMenu);
+            
+            // 点击其他地方关闭菜单
+            const closeMenu = (e) => {
+                if (!contextMenu.contains(e.target)) {
+                    if (document.body.contains(contextMenu)) {
+                        document.body.removeChild(contextMenu);
+                    }
+                    document.removeEventListener('click', closeMenu);
+                    document.removeEventListener('touchstart', closeMenu);
+                }
+            };
+            
+            setTimeout(() => {
+                document.addEventListener('click', closeMenu);
+                document.addEventListener('touchstart', closeMenu, { passive: true });
+            }, 0);
+        }
     }
 
     // 注册设置菜单命令
@@ -1120,5 +1280,99 @@
             translatedBtn.classList.toggle('active', activeMode === 'translated');
             dualBtn.classList.toggle('active', activeMode === 'dual');
         }
+    }
+
+    // 创建设置面板
+    function createSettingsPanel() {
+        const existingPanel = document.querySelector(`.${NAMESPACE}-settings-panel`);
+        if (existingPanel) {
+            return existingPanel;
+        }
+
+        const panel = document.createElement('div');
+        panel.className = `${NAMESPACE}-settings-panel`;
+        panel.style.display = 'none';
+
+        panel.innerHTML = `
+            <h2>翻译设置</h2>
+            <div class="${NAMESPACE}-close-btn">&times;</div>
+            
+            <div class="${NAMESPACE}-settings-group">
+                <h3>基本设置</h3>
+                <div class="${NAMESPACE}-settings-item">
+                    <label>默认折叠面板</label>
+                    <input type="checkbox" id="${NAMESPACE}-setting-collapsed" ${CONFIG.defaultCollapsed ? 'checked' : ''}>
+                </div>
+                <div class="${NAMESPACE}-settings-item">
+                    <label>目标语言</label>
+                    <select id="${NAMESPACE}-setting-target-language">
+                        ${SUPPORTED_LANGUAGES.map(lang => 
+                           `<option value="${lang.code}" ${lang.code === CONFIG.targetLanguage ? 'selected' : ''}>${lang.name}</option>`
+                        ).join('')}
+                    </select>
+                </div>
+                <div class="${NAMESPACE}-settings-item">
+                    <label>启用右键菜单</label>
+                    <input type="checkbox" id="${NAMESPACE}-setting-right-click-menu" ${CONFIG.enableRightClickMenu ? 'checked' : ''}>
+                </div>
+                <div class="${NAMESPACE}-settings-item">
+                    <label>长按响应延迟(毫秒)</label>
+                    <input type="number" id="${NAMESPACE}-setting-long-press-delay" value="${CONFIG.longPressDelay}" min="500" max="2000" step="100">
+                </div>
+            </div>
+            
+            <div class="${NAMESPACE}-settings-group">
+                <h3>微软翻译设置</h3>
+                <div class="${NAMESPACE}-settings-item">
+                    <label>API 密钥</label>
+                    <input type="text" id="${NAMESPACE}-setting-ms-key" value="${CONFIG。microsoftKey || ''}">
+                </div>
+                <div class="${NAMESPACE}-settings-item">
+                    <label>API 区域</label>
+                    <input type="text" id="${NAMESPACE}-setting-ms-region" value="${CONFIG。microsoftRegion || 'global'}">
+                </div>
+                <div class="${NAMESPACE}-settings-item">
+                    <label>使用中国区服务器</label>
+                    <input type="checkbox" id="${NAMESPACE}-setting-use-cn" ${CONFIG。useChineseServer ? 'checked' : ''}>
+                </div>
+                <p class="${NAMESPACE}-settings-tip">提示: 微软翻译API密钥可选，若不填写则尝试使用Edge浏览器免费token</p>
+            </div>
+            
+            <div class="${NAMESPACE}-controls">
+                <button class="${NAMESPACE}-btn" id="${NAMESPACE}-settings-save">保存设置</button>
+            </div>
+        `;
+
+        document.body.appendChild(panel);
+
+        // 关闭按钮事件
+        panel.querySelector(`.${NAMESPACE}-close-btn`).addEventListener('click', () => {
+            panel.style.display = 'none';
+        });
+
+        // 保存设置按钮事件
+        document.getElementById(`${NAMESPACE}-settings-save`).addEventListener('click', () => {
+            // 保存基本设置
+            CONFIG.defaultCollapsed = document.getElementById(`${NAMESPACE}-setting-collapsed`).checked;
+            CONFIG.targetLanguage = document.getElementById(`${NAMESPACE}-setting-target-language`).value;
+            CONFIG.enableRightClickMenu = document.getElementById(`${NAMESPACE}-setting-right-click-menu`).checked;
+            CONFIG.longPressDelay = parseInt(document.getElementById(`${NAMESPACE}-setting-long-press-delay`).value) || 800;
+            
+            // 保存微软翻译设置
+            CONFIG.microsoftKey = document.getElementById(`${NAMESPACE}-setting-ms-key`).value;
+            CONFIG.microsoftRegion = document.getElementById(`${NAMESPACE}-setting-ms-region`).value || 'global';
+            CONFIG.useChineseServer = document.getElementById(`${NAMESPACE}-setting-use-cn`).checked;
+
+            // 保存到存储
+            GM_setValue('translator_config', CONFIG);
+            
+            alert('设置已保存');
+            panel.style.display = 'none';
+            
+            // 刷新页面以应用新设置
+            // location.reload();
+        });
+
+        return panel;
     }
 })();
