@@ -8,8 +8,8 @@
 // @createTime  2022年04月13日 11:01
 // @updateTime  2022年04月14日 10:25
 // @include     *
-// @downloadURL https://update.cn-greasyfork.org/scripts/443317/via-%E5%A4%8D%E5%88%B6markdown%E9%93%BE%E6%8E%A5.user.js
-// @updateURL https://update.cn-greasyfork.org/scripts/443317/via-%E5%A4%8D%E5%88%B6markdown%E9%93%BE%E6%8E%A5.meta.js
+// @downloadURL https://update.greasyfork.org.cn/scripts/443317/via-%E5%A4%8D%E5%88%B6markdown%E9%93%BE%E6%8E%A5.user.js
+// @updateURL https://update.greasyfork.org.cn/scripts/443317/via-%E5%A4%8D%E5%88%B6markdown%E9%93%BE%E6%8E%A5.meta.js
 // ==/UserScript==
 
 (function () {
