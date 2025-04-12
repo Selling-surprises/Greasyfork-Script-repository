@@ -26,8 +26,8 @@
 // @grant        GM_xmlhttpRequest
 // @grant        unsafeWindow
 // @run-at       document-start
-// @downloadURL https://yxd.dahi.edu.eu.org/scripts/483960/%E5%B0%8F%E7%BA%A2%E4%B9%A6%E4%BC%98%E5%8C%96.user.js
-// @updateURL https://yxd.dahi.edu.eu.org/scripts/483960/%E5%B0%8F%E7%BA%A2%E4%B9%A6%E4%BC%98%E5%8C%96.meta.js
+// @downloadURL https://update.greasyfork.org.cn/scripts/483960/%E5%B0%8F%E7%BA%A2%E4%B9%A6%E4%BC%98%E5%8C%96.user.js
+// @updateURL https://update.greasyfork.org.cn/scripts/483960/%E5%B0%8F%E7%BA%A2%E4%B9%A6%E4%BC%98%E5%8C%96.meta.js
 // ==/UserScript==
 
 (function (Qmsg, Utils, DOMUtils, pops, Viewer) {
