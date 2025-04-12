@@ -32,8 +32,8 @@
 // @match              *://www.bing.com/*
 // @match              *://hanyu.baidu.com/*
 // @match              *://fanyi.baidu.com/*
-// @downloadURL https://yxd.dahi.edu.eu.org/scripts/425083/%E2%9C%A8%E5%BF%AB%E4%B9%90%E7%82%B9%20-%20%E8%B6%85%E5%A4%9A%E5%8A%A8%E6%BC%AB%E5%BD%B1%E8%A7%86%E7%AB%99%E7%82%B9%E7%BB%BC%E5%90%88%E4%BC%98%E5%8C%96%F0%9F%8E%89.user.js
-// @updateURL https://yxd.dahi.edu.eu.org/scripts/425083/%E2%9C%A8%E5%BF%AB%E4%B9%90%E7%82%B9%20-%20%E8%B6%85%E5%A4%9A%E5%8A%A8%E6%BC%AB%E5%BD%B1%E8%A7%86%E7%AB%99%E7%82%B9%E7%BB%BC%E5%90%88%E4%BC%98%E5%8C%96%F0%9F%8E%89.meta.js
+// @downloadURL https://update.greasyfork.org.cn/scripts/425083/%E2%9C%A8%E5%BF%AB%E4%B9%90%E7%82%B9%20-%20%E8%B6%85%E5%A4%9A%E5%8A%A8%E6%BC%AB%E5%BD%B1%E8%A7%86%E7%AB%99%E7%82%B9%E7%BB%BC%E5%90%88%E4%BC%98%E5%8C%96%F0%9F%8E%89.user.js
+// @updateURL https://update.greasyfork.org.cn/scripts/425083/%E2%9C%A8%E5%BF%AB%E4%B9%90%E7%82%B9%20-%20%E8%B6%85%E5%A4%9A%E5%8A%A8%E6%BC%AB%E5%BD%B1%E8%A7%86%E7%AB%99%E7%82%B9%E7%BB%BC%E5%90%88%E4%BC%98%E5%8C%96%F0%9F%8E%89.meta.js
 // ==/UserScript==
 
 (function (){
