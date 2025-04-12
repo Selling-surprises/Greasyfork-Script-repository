@@ -26,8 +26,8 @@
 // @grant             GM_getResourceText
 // @run-at            document-idle
 // @require           https://lib.baomitu.com/layui/2.9.3/layui.min.js
-// @downloadURL https://yxd.dahi.edu.eu.org/scripts/512984/%E3%80%90%E5%A4%8D%E6%B4%BB%E7%89%88%E3%80%91%E7%99%BE%E5%BA%A6%E7%BD%91%E7%9B%98SVIP%E8%A7%A3%E6%9E%90%E9%AB%98%E9%80%9F%E4%B8%8B%E8%BD%BD-%E5%BA%A6%E5%A8%98%E5%8A%A0%E9%80%9F.user.js
-// @updateURL https://yxd.dahi.edu.eu.org/scripts/512984/%E3%80%90%E5%A4%8D%E6%B4%BB%E7%89%88%E3%80%91%E7%99%BE%E5%BA%A6%E7%BD%91%E7%9B%98SVIP%E8%A7%A3%E6%9E%90%E9%AB%98%E9%80%9F%E4%B8%8B%E8%BD%BD-%E5%BA%A6%E5%A8%98%E5%8A%A0%E9%80%9F.meta.js
+// @downloadURL https://update.greasyfork.org.cn/scripts/512984/%E3%80%90%E5%A4%8D%E6%B4%BB%E7%89%88%E3%80%91%E7%99%BE%E5%BA%A6%E7%BD%91%E7%9B%98SVIP%E8%A7%A3%E6%9E%90%E9%AB%98%E9%80%9F%E4%B8%8B%E8%BD%BD-%E5%BA%A6%E5%A8%98%E5%8A%A0%E9%80%9F.user.js
+// @updateURL https://update.greasyfork.org.cn/scripts/512984/%E3%80%90%E5%A4%8D%E6%B4%BB%E7%89%88%E3%80%91%E7%99%BE%E5%BA%A6%E7%BD%91%E7%9B%98SVIP%E8%A7%A3%E6%9E%90%E9%AB%98%E9%80%9F%E4%B8%8B%E8%BD%BD-%E5%BA%A6%E5%A8%98%E5%8A%A0%E9%80%9F.meta.js
 // ==/UserScript==
 
 
