@@ -15,8 +15,8 @@
 // @grant        unsafeWindow
 // @run-at       document-start
 // @require      https://unpkg.com/jquery@3.6.0/dist/jquery.min.js
-// @downloadURL https://yxd.dahi.edu.eu.org/scripts/513528/123%20%E4%BA%91%E7%9B%98%E4%BC%9A%E5%91%98%E9%9D%92%E6%98%A5%E7%89%88.user.js
-// @updateURL https://yxd.dahi.edu.eu.org/scripts/513528/123%20%E4%BA%91%E7%9B%98%E4%BC%9A%E5%91%98%E9%9D%92%E6%98%A5%E7%89%88.meta.js
+// @downloadURL https://update.greasyfork.org.cn/scripts/513528/123%20%E4%BA%91%E7%9B%98%E4%BC%9A%E5%91%98%E9%9D%92%E6%98%A5%E7%89%88.user.js
+// @updateURL https://update.greasyfork.org.cn/scripts/513528/123%20%E4%BA%91%E7%9B%98%E4%BC%9A%E5%91%98%E9%9D%92%E6%98%A5%E7%89%88.meta.js
 // ==/UserScript==
 
 (function () {
