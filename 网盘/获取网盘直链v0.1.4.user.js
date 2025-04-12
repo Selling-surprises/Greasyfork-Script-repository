@@ -60,8 +60,8 @@
 // @original-license   AGPL-3.0-or-later
 // @original-script    https://yxd.dahi.edu.eu.org/scripts/436446-%E7%BD%91%E7%9B%98%E7%9B%B4%E9%93%BE%E4%B8%8B%E8%BD%BD%E5%8A%A9%E6%89%8B
 // @original-change    样式完善，功能修改
-// @downloadURL https://update.greasyfork.org/scripts/523351/%E8%8E%B7%E5%8F%96%E7%BD%91%E7%9B%98%E7%9B%B4%E9%93%BE.user.js
-// @updateURL https://update.greasyfork.org/scripts/523351/%E8%8E%B7%E5%8F%96%E7%BD%91%E7%9B%98%E7%9B%B4%E9%93%BE.meta.js
+// @downloadURL https://update.greasyfork.org.cn/scripts/523351/%E8%8E%B7%E5%8F%96%E7%BD%91%E7%9B%98%E7%9B%B4%E9%93%BE.user.js
+// @updateURL https://update.greasyfork.org.cn/scripts/523351/%E8%8E%B7%E5%8F%96%E7%BD%91%E7%9B%98%E7%9B%B4%E9%93%BE.meta.js
 // ==/UserScript==
 
 (function () {
