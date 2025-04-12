@@ -34,8 +34,8 @@
 // @compatible      edge 版本不小于 93
 // @compatible      chrome 版本不小于 93
 // @compatible      firefox 版本不小于 92
-// @downloadURL https://yxd.dahi.edu.eu.org/scripts/395575/B%E7%AB%99%E5%B0%81%E9%9D%A2%E8%8E%B7%E5%8F%96.user.js
-// @updateURL https://yxd.dahi.edu.eu.org/scripts/395575/B%E7%AB%99%E5%B0%81%E9%9D%A2%E8%8E%B7%E5%8F%96.meta.js
+// @downloadURL https://update.greasyfork.org.cn/scripts/395575/B%E7%AB%99%E5%B0%81%E9%9D%A2%E8%8E%B7%E5%8F%96.user.js
+// @updateURL https://update.greasyfork.org.cn/scripts/395575/B%E7%AB%99%E5%B0%81%E9%9D%A2%E8%8E%B7%E5%8F%96.meta.js
 // ==/UserScript==
 
 (function() {
