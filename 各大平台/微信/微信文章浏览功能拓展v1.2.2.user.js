@@ -12,8 +12,8 @@
 // @grant        GM_getValue
 // @icon         https://fastly.jsdelivr.net/gh/ZiuChen/ZiuChen@main/avatar.jpg
 // @license      MIT
-// @downloadURL https://yxd.dahi.edu.eu.org/scripts/426475/%E5%BE%AE%E4%BF%A1%E6%96%87%E7%AB%A0%E6%B5%8F%E8%A7%88%E5%8A%9F%E8%83%BD%E6%8B%93%E5%B1%95.user.js
-// @updateURL https://yxd.dahi.edu.eu.org/scripts/426475/%E5%BE%AE%E4%BF%A1%E6%96%87%E7%AB%A0%E6%B5%8F%E8%A7%88%E5%8A%9F%E8%83%BD%E6%8B%93%E5%B1%95.meta.js
+// @downloadURL https://update.greasyfork.org.cn/scripts/426475/%E5%BE%AE%E4%BF%A1%E6%96%87%E7%AB%A0%E6%B5%8F%E8%A7%88%E5%8A%9F%E8%83%BD%E6%8B%93%E5%B1%95.user.js
+// @updateURL https://update.greasyfork.org.cn/scripts/426475/%E5%BE%AE%E4%BF%A1%E6%96%87%E7%AB%A0%E6%B5%8F%E8%A7%88%E5%8A%9F%E8%83%BD%E6%8B%93%E5%B1%95.meta.js
 // ==/UserScript==
 
 let summary_show_state
