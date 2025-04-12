@@ -19,8 +19,8 @@
 // @license      GNU General Public License v3.0
 // @run-at       document-end
 // @require      https://cdnjs.cloudflare.com/ajax/libs/jszip/3.9.1/jszip.min.js
-// @downloadURL https://yxd.dahi.edu.eu.org/scripts/483847/XHS-Downloader.user.js
-// @updateURL https://yxd.dahi.edu.eu.org/scripts/483847/XHS-Downloader.meta.js
+// @downloadURL https://update.greasyfork.org.cn/scripts/483847/XHS-Downloader.user.js
+// @updateURL https://update.greasyfork.org.cn/scripts/483847/XHS-Downloader.meta.js
 // ==/UserScript==
 
 (function () {
